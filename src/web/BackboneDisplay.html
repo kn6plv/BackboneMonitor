@@ -1,0 +1,22 @@
+<div>
+    <div id="info-icon" style="background-image: url('{{icon}}')"></div>
+    <div id="info-header" class="health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+        <span class="name">{{name}}</span>
+        <div class="health">Now: <span class="status">{{health.health}}</span></div>
+        <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
+    </div>
+    <div id="info-body">
+        <div class="col">
+            <div class="col-header">Sites</div>
+            {{#each sites}}
+            {{> SiteHealth }}
+            {{/each}}
+        </div>
+        <div class="col">
+            <div class="col-header">Links</div>
+            {{#each links}}
+            {{> SiteLinkHealth }}
+            {{/each}}
+        </div>
+    </div>
+</div>

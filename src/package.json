@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "debug": "^4.3.4",
+    "fast-glob": "^3.2.11",
+    "handlebars": "^4.7.7",
+    "koa": "^2.13.4",
+    "koa-router": "^10.1.1",
+    "koa-websocket": "^7.0.0",
+    "leaflet": "^1.8.0",
+    "node-fetch": "^2.6.7",
+    "sqlite": "^4.1.1",
+    "sqlite3": "^5.0.8",
+    "twilio": "^3.77.2"
+  }
+}
