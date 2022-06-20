@@ -48,6 +48,16 @@ class Backbone {
         return links.map(link => SiteLink.getSiteLink(link.peerA, link.peerB, link.type, link.bandwidth));
     }
 
+    async getSiteLink(siteA, siteB) {
+        Log("getSiteLink:", siteA, siteB);
+        const link = await db.get(`SELECT peerA, peerB, type, bandwidth FROM backbone_links WHERE backbone = '${this.name}' AND peerA = (SELECT node FROM site_nodes WHERE site == '${siteA}') AND peerB = (SELECT node FROM site_nodes WHERE site == '${siteB}')`);
+        Log(link);
+        if (!link) {
+            return null;
+        }
+        return SiteLink.getSiteLink(link.peerA, link.peerB, link.type, link.bandwidth);
+    }
+
     async getHealth() {
         Log("getHealth:");
         const sites = await this.getSites();

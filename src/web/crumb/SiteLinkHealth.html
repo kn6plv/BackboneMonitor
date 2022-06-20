@@ -1,0 +1,9 @@
+<div class="site-link-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+    <a href="{{path}}#{{peerA}}+{{peerB}}">
+        <div class="link">
+            <div class="name">{{peerA}}</div><div class="join">&nbsp;</div><div class="name">{{peerB}}</div>
+        </div>
+        <div class="health">Now: <span class="status">{{health.health}}</span></div>
+        <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
+    </a>
+</div>

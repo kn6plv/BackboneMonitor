@@ -8,7 +8,7 @@ function loadTemplates() {
     Glob.sync([ `**.html` ], { cwd: `${__dirname}` }).forEach(template => {
         const name = template.replace(/\//g, "").replace(/\.html$/, "");
         const func = Handlebars.compile(FS.readFileSync(`${__dirname}/${template}`, { encoding: "utf8" }));
-        Template[name] = ctx => {
+        Template[name] = function(ctx) {
             return func(ctx, {
                 allowProtoMethodsByDefault: true,
                 allowProtoPropertiesByDefault: true

@@ -100,6 +100,12 @@ const Utils = {
                        .replace(/\.local\.mesh$/, "")
                        .replace(/^mid\d\./, "")
                        + ".local.mesh";
+    },
+
+    shortHostname(hostname) {
+        return !hostname ? hostname : hostname.replace(/^dtdlink\./, "")
+                       .replace(/\.local\.mesh$/, "")
+                       .replace(/^mid\d\./, "");
     }
 
 };

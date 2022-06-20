@@ -48,14 +48,7 @@ function runMessageManager() {
     }
   });
   ws.addEventListener('open', () => {
-    const hashes = decodeURIComponent(location.hash).split('#');
-    let arg;
-    try {
-      arg = JSON.parse(atob(hashes[2]));
-    }
-    catch (_) {
-    }
-    send("tab.select", { name: hashes[1] || 'summary', arg: arg });
+    send("init", { path: location.hash.split("#").map(p => decodeURIComponent(p)).slice(1) });
   });
   setInterval(() => send('keepalive'), 30 * 1000);
 }
@@ -103,7 +96,7 @@ onMessage['html.update'] = msg => {
 currentLocation = {};
 
 function updateHash() {
-  let nhash = '#';
+  let nhash = "#";
   if (currentLocation.name) {
     nhash += currentLocation.name;
   }
@@ -123,21 +116,14 @@ onMessage['page.change'] = msg => {
 
 window.addEventListener('pageshow', runMessageManager);
 window.addEventListener('hashchange', () => {
-  const hashes = location.hash.split('#');
-  let arg;
-  try {
-    arg = JSON.parse(atob(hashes[2]));
-  }
-  catch (_) {
-  }
-  send("tab.select", { name: hashes[1], arg: arg });
+  send("select", { path: location.hash.split("#").map(p => decodeURIComponent(p)).slice(1) });
 });
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
-    send('ui.visible', true);
+    send('visible', true);
   }
   else {
-    send('ui.visible', false);
+    send('visible', false);
   }
 });
 

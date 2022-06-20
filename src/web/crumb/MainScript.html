@@ -1,0 +1,13 @@
+<script>
+    window.map = {
+        map: L.map("map", {
+            attributionControl: false,
+            zoomControl: false
+        }),
+        colors: { good: 'green', poor: 'orange', bad: 'red' },
+        icons: { good: L.divIcon({ className: "green-dot-16", iconSize: [ 16, 16 ] }), poor: L.divIcon({ className: "orange-dot-16", iconSize: [ 16, 16 ] }), bad: L.divIcon({ className: "red-dot-16", iconSize: [ 16, 16 ] }) }
+    };
+    window.map.group = L.layerGroup().addTo(map.map);
+    L.tileLayer("http://kn6plv-tiles.local.mesh/tile/{z}/{x}/{y}.png", {}).addTo(window.map.map);
+    window.map.map.setView([ 37.7, -122.0 ], 10, { animate: false });
+</script>

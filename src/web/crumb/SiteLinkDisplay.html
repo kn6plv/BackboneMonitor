@@ -1,0 +1,30 @@
+<div class="sitelink-display">
+    {{#with info}}
+    <div id="info-icon" style="background-image: url()"></div>
+    <div id="info-header">
+        <div class="site-link-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+            <div class="link">
+                <div class="name">{{siteA}}</div><div class="join">&nbsp;</div><div class="name">{{siteB}}</div>
+            </div>
+            <div class="health">Now: <span class="status">{{health.health}}</span></div>
+            <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
+        </div>
+    </div>
+    <div id="info-body">
+        <div class="col">
+            <div class="col-header">{{siteA}}</div>
+            {{#with nodeA}}
+            {{> NodeHealth }}
+            {{/with}}
+            <div class="col-header">{{siteB}}</div>
+            {{#with nodeB}}
+            {{> NodeHealth }}
+            {{/with}}
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+    {{/with}}
+</div>
+{{> UpdateMapScript }}

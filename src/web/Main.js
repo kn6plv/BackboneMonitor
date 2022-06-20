@@ -1,67 +1,110 @@
 
 const Log = require("debug")("web:main");
-const Template = require("./Template");
-const Backbone = require("../db/Backbone");
+const CrumbMain = require("./crumb/Main");
+const CrumbBackbone = require("./crumb/Backbone");
 
 async function HTML(ctx) {
     Log("loading:");
-    Template.load();
-    const selection = await getSelection();
-    const selected = selection[0];
-    ctx.body = Template.Main({
-        selection: selection,
-        map: {
-            dots: selected.sites.filter(site => site.location).map(site => {
-                return { l: site.location, h: site.health.health };
-            }),
-            lines: selected.links.map(link => {
-                return {
-                    a: selected.sites.find(site => site.name == link.peerA).location,
-                    b: selected.sites.find(site => site.name == link.peerB).location,
-                    h: link.health.health
-                };
-            })
-        },
-        selected: selected
-    });
+    const root = new CrumbBackbone();
+    root.state = {
+        breadcrumbs: [ root ]
+    };
+    ctx.body = await new CrumbMain(root).html();
     ctx.type = "text/html";
 }
 
 async function WS(ctx) {
-}
 
-async function getSelection() {
-    const selection = [];
-    const backbones = await Backbone.getAll();
-    for (let i = 0; i < backbones.length; i++) {
-        const backbone = backbones[i];
-        const sites = await backbone.getSites();
-        const selectedsites = [];
-        for (let j = 0; j < sites.length; j++) {
-            selectedsites.push({
-                name: sites[j].name,
-                location: await sites[j].getLocation(),
-                health: await sites[j].getHealth()
+    const State = {
+        breadcrumbs: [],
+        change: "none",
+
+        send: function(cmd, value) {
+            try {
+                ctx.websocket.send(JSON.stringify({
+                    cmd: cmd,
+                    value: value
+                }));
+            }
+            catch (e) {
+                Log(e);
+            }
+        },
+
+        update: async function() {
+            const last = this.breadcrumbs[this.breadcrumbs.length - 1];
+            this.send("html.update", {
+                id: "info",
+                html: await last.html()
+            });
+            this.send("html.update", {
+                id: "header",
+                html: State.breadcrumbs[0].breadcrumbs()
             });
         }
-        const links = await backbone.getSiteLinks();
-        const selectedlinks = [];
-        for (let j = 0; j < links.length; j++) {
-            selectedlinks.push({
-                peerA: (await links[j].peerA.getSite()).name,
-                peerB: (await links[j].peerB.getSite()).name,
-                health: await links[j].getHealth()
-            });
+    };
+
+    const root = new CrumbBackbone();
+    root.state = State;
+    State.breadcrumbs.push(root);
+    await root.html();
+
+    ctx.websocket.on('error', () => {
+         ctx.websocket.close();
+    });
+
+    const q = [];
+    ctx.websocket.on('message', async data => {
+        try {
+            const msg = JSON.parse(data);
+            const cmd = `cmd_${msg.cmd || "missing"}`;
+            State.change = "none";
+            const dispatch = async () => {
+                let fn = null;
+                let ctx = State.breadcrumbs[State.breadcrumbs.length - 1];
+                if (ctx) {
+                    fn = ctx[cmd];
+                }
+                if (!fn) {
+                    ctx = null;
+                    fn = State[cmd];
+                }
+                if (fn) {
+                    q.push(async () => {
+                        try {
+                            Log(msg);
+                            await fn.call(ctx, msg);
+                            switch (State.change) {
+                                case "push":
+                                case "update":
+                                    await State.update();
+                                    break;
+                                case "pop":
+                                    State.change = "update";
+                                    dispatch();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        catch (e) {
+                            Log(e);
+                        }
+                    });
+                    if (q.length === 1) {
+                        while (q.length) {
+                            await q[0]();
+                            q.shift();
+                        }
+                    }
+                }
+            }
+            await dispatch();
         }
-        selection.push({
-            name: backbone.name,
-            icon: await backbone.getIcon(),
-            health: await backbone.getHealth(),
-            sites: selectedsites,
-            links: selectedlinks
-        });
-    }
-    return selection;
+        catch (e) {
+            Log(e);
+        }
+    });
 }
 
 module.exports = {
