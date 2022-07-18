@@ -1,0 +1,24 @@
+<div class="site-display">
+    {{#with info}}
+    <div id="info-icon" style="background-image: url()"></div>
+    <div id="info-header">
+        <div class="site-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+            <div class="name">{{site}}</div>
+            <div class="health">Now: <span class="status">{{health.health}}</span></div>
+            <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
+        </div>
+    </div>
+    <div id="info-body">
+        <div class="col">
+            <div class="col-header">Nodes</div>
+            {{#each nodes}}
+            {{> NodeHealth path = ../../path }}
+            {{/each}}
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+    {{/with}}
+</div>
+{{> UpdateMapScript }}

@@ -1,0 +1,32 @@
+<div class="node-display">
+    {{#with info}}
+    <div id="info-icon" style="background-image: url()"></div>
+    <div id="info-header">
+        <div class="site-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+            <div class="name">{{node}}</div>
+            <div class="health">Now: <span class="status">{{health.health}}</span></div>
+            <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
+        </div>
+    </div>
+    <div id="info-body">
+        <div class="col">
+            {{#with basics}}
+            <div><div class="label">Description</div><div class="value">{{description}}</div></div>
+            <div><div class="label">Hardware</div><div class="value">{{hardware}}</div></div>
+            <div><div class="label">Firmware</div><div class="value">{{firmware}}</div></div>
+            <div><div class="label">MAC</div><div class="value"></div></div>
+            <div><div class="label">SSID</div><div class="value">{{ssid}}</div></div>
+            {{#if channel}}
+            <div><div class="label">Channel</div><div class="value">{{channel}}</div></div>
+            <div><div class="label">Frequency</div><div class="value">{{div frequency 1000}} GHz</div></div>
+            <div><div class="label">Bandwidth</div><div class="value">{{bandwidth}} MHz</div></div>
+            {{/if}}
+            {{/with}}
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+    {{/with}}
+</div>
+{{> UpdateMapScript }}

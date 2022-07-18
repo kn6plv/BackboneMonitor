@@ -17,16 +17,16 @@ class Site {
     }
 
     async addNode(node) {
-        await db.query(`INSERT INTO site_nodes (site, node) VALUES ('${this.name}', '${node.name}');`);
+        await db.query(`INSERT INTO site_nodes (site, node) VALUES ("${this.name}", "${node.name}");`);
     }
 
     async addRootNode(node) {
-        await db.query(`INSERT INTO site_rootnode (site, node) VALUES ('${this.name}', '${node.name}');`);
+        await db.query(`INSERT INTO site_rootnode (site, node) VALUES ("${this.name}", "${node.name}");`);
     }
 
     async getRootNode() {
         Log("RootNodes:");
-        const root = await db.get(`SELECT node FROM site_rootnode WHERE site = '${this.name}';`);
+        const root = await db.get(`SELECT node FROM site_rootnode WHERE site = "${this.name}";`);
         Log("root:", root);
         if (!root) {
             return null;
@@ -36,8 +36,12 @@ class Site {
 
     async getNodes() {
         Log("getNodes:");
-        const nonroots = await db.getAll(`SELECT node FROM site_nodes WHERE site = '${this.name}';`);
+        const nonroots = await db.getAll(`SELECT node FROM site_nodes WHERE site = "${this.name}";`);
         return nonroots.map(nonroot => Node.getNode(nonroot.node));
+    }
+
+    async getNode(name) {
+        return Node.getNode(name);
     }
 
     async getLocation() {
@@ -50,7 +54,7 @@ class Site {
         const root = await this.getRootNode();
         const nodes = await this.getNodes();
         const healths = await Promise.all(nodes.map(async node => node.getHealth(root)));
-        const uptime = healths.length ? healths.reduce((p, v) => p + v.uptime, 0) / healths.length : 0;
+        const uptime = healths.length ? healths.reduce((p, v) => Math.min(p, v.uptime), 100) : 0;
         const health = healths.reduce((p, v) => p !== "bad" && (p === "good" || v.health === "bad") ? v.health : p, "good");
         Log(healths);
         return {

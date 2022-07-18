@@ -3,6 +3,11 @@ const Log = require("debug")("utils");
 const fetch = require("node-fetch");
 const AbortController = require("abort-controller").AbortController;
 
+const BANDWIDTH_GOOD = 70;
+const BANDWIDTH_POOR = 50;
+const UPTIME_GOOD = 95;
+const UPTIME_POOR = 90;
+
 const scoreboard = {
     marks: {},
     pending: []
@@ -106,6 +111,20 @@ const Utils = {
         return !hostname ? hostname : hostname.replace(/^dtdlink\./, "")
                        .replace(/\.local\.mesh$/, "")
                        .replace(/^mid\d\./, "");
+    },
+
+    getHealthStatus(bandwidth, uptime) {
+        const uhealth = (uptime >= UPTIME_GOOD ? "good" : uptime >= UPTIME_POOR ? "poor" : "bad");
+        const bhealth = (bandwidth >= BANDWIDTH_GOOD ? "good" : bandwidth >= BANDWIDTH_POOR ? "poor" : "bad");
+        if (uhealth === "poor" || bhealth === "poor") {
+            return "poor"
+        }
+        else if (uhealth === "bad" || bhealth === "bad") {
+            return "bad"
+        }
+        else {
+            return "good"
+        }
     }
 
 };

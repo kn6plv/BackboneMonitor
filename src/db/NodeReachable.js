@@ -17,14 +17,14 @@ class NodeReachable {
     async getResults(pastMinutes) {
         Log("getResult:");
         return await db.getAll(
-            `SELECT timestamp, reachable FROM node_reachable WHERE node = '${this.node.name}' AND timestamp > datetime('now', '-${pastMinutes} minutes') ORDER BY timestamp;`
+            `SELECT timestamp, reachable FROM node_reachable WHERE node = "${this.node.name}" AND timestamp > datetime("now", "-${pastMinutes} minutes") ORDER BY timestamp;`
         );
     }
 
     async addResult(result) {
         Log("addResult:", result);
         await db.query(
-            `INSERT INTO node_reachable (timestamp, node, reachable) VALUES(datetime('now'), '${this.node.name}', ${result.reachable});`
+            `INSERT INTO node_reachable (timestamp, node, reachable) VALUES(datetime("now"), "${this.node.name}", ${result.reachable});`
         );
     }
     

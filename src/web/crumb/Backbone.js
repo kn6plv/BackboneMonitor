@@ -2,33 +2,56 @@
 const Log = require("debug")("crumb:backbone");
 const Crumb = require("./Crumb");
 const Backbone = require("../../db/Backbone");
-const SiteLink = require("./SiteLink");
 
 class CrumbBackbone extends Crumb {
 
     constructor() {
-        super({ name: "" });
+        super();
+    }
+
+    get name() {
+        return this.backbone.name;
     }
 
     async html() {
-        const selection = await this.getSelection();
-        const selected = selection[0];
-        this.name = selected.name;
+        this.backbone = (await Backbone.getAll())[0];
+    
+        const sites = (await Promise.all((await this.backbone.getSites()).map(async site => {
+            return {
+                name: site.name,
+                location: await site.getLocation(),
+                health: await site.getHealth()
+            }
+        }))).filter(site => site.location);
+        const links = await Promise.all((await this.backbone.getSiteLinks()).map(async link => {
+            return {
+                peerA: (await link.peerA.getSite()).name,
+                peerB: (await link.peerB.getSite()).name,
+                health: await link.getHealth()
+            }
+        }));
+
         return this.Template.BackboneDisplay({
             path: `#${this.name}`,
             map: {
-                dots: selected.sites.filter(site => site.location).map(site => {
-                    return { l: site.location, h: site.health.health };
+                dots: sites.filter(site => site.location).map(site => {
+                    return { l: site.location, h: site.health, t: site.name, r: `#${this.name}#${site.name}` };
                 }),
-                lines: selected.links.map(link => {
+                lines: links.map(link => {
                     return {
-                        a: selected.sites.find(site => site.name == link.peerA).location,
-                        b: selected.sites.find(site => site.name == link.peerB).location,
-                        h: link.health.health
+                        a: sites.find(site => site.name == link.peerA).location,
+                        b: sites.find(site => site.name == link.peerB).location,
+                        h: link.health
                     };
                 })
             },
-            info: selected
+            info: {
+                name: this.backbone.name,
+                icon: await this.backbone.getIcon(),
+                health: await this.backbone.getHealth(),
+                sites: sites,
+                links: links
+            }
         });
     }
 
@@ -46,46 +69,13 @@ class CrumbBackbone extends Crumb {
             const link = selection[0].split("+");
             if (link.length === 2) {
                 // Navigate to site link
-                this.pushCrumb("SiteLink", { name: selection[0], peerA: link[0], peerB: link[1] });
+                this.pushCrumb("SiteLink", { name: selection[0], link: await this.backbone.getSiteLink(link[0], link[1]) });
             }
             else {
                 // Navigate to site
+                this.pushCrumb("Site", { name: selection[0], site: await this.backbone.getSite(selection[0]) });
             }
         }
-    }
-
-    async getSelection() {
-        const selection = [];
-        const backbones = await Backbone.getAll();
-        for (let i = 0; i < backbones.length; i++) {
-            const backbone = backbones[i];
-            const sites = await backbone.getSites();
-            const selectedsites = [];
-            for (let j = 0; j < sites.length; j++) {
-                selectedsites.push({
-                    name: sites[j].name,
-                    location: await sites[j].getLocation(),
-                    health: await sites[j].getHealth()
-                });
-            }
-            const links = await backbone.getSiteLinks();
-            const selectedlinks = [];
-            for (let j = 0; j < links.length; j++) {
-                selectedlinks.push({
-                    peerA: (await links[j].peerA.getSite()).name,
-                    peerB: (await links[j].peerB.getSite()).name,
-                    health: await links[j].getHealth()
-                });
-            }
-            selection.push({
-                name: backbone.name,
-                icon: await backbone.getIcon(),
-                health: await backbone.getHealth(),
-                sites: selectedsites,
-                links: selectedlinks
-            });
-        }
-        return selection;
     }
     
 }

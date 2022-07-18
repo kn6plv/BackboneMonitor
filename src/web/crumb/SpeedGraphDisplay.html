@@ -1,0 +1,44 @@
+<div class="speedgraph-display">
+    <div class="title">{{{label}}}</div>
+    <canvas id="{{name}}" width={{width}} height={{height}}></canvas>
+    <script>
+        const data = [ {{#each data}}{{this}},{{/each}} ];
+        const canvas = document.getElementById("{{name}}");
+        const ctx = canvas.getContext("2d");
+        const xoff = 24;
+        const yoff = 12;
+        const xscale = ({{width}} - xoff) / (data.length - 1);
+        const sheight = {{height}} - yoff;
+        ctx.font = "10px Arial";
+        ctx.strokeStyle = "green";
+        ctx.fillStyle = "green";
+        ctx.fillText("70%", 0, 0.30 * sheight);
+        ctx.strokeRect(xoff, 0.30 * sheight, {{width}}, 0);
+        ctx.strokeStyle = "red";
+        ctx.fillStyle = "red";
+        ctx.fillText("50%", 0, 0.50 * sheight);
+        ctx.strokeRect(xoff, 0.50 * sheight, {{width}}, 0);
+        ctx.beginPath();
+        ctx.strokeStyle = "#F0F0F0";
+        ctx.moveTo(xoff, 0);
+        ctx.lineTo(xoff, sheight);
+        ctx.lineTo({{width}}, sheight);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = "#404040";
+        for (let i = 1; i < {{length data}}; i++) {
+            ctx.moveTo(xoff + i * xscale, 0);
+            ctx.lineTo(xoff + i * xscale, sheight);
+        }
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.moveTo(xoff, data[i] * sheight);
+        for (let i = 1; i < {{length data}}; i++) {
+            ctx.lineTo(xoff + i * xscale, data[i] * sheight);
+        }
+        ctx.stroke();
+        ctx.fillStyle = "white";
+        ctx.fillText("Last Day", 0.5 * {{width}}, {{height}} - 2);
+    </script>
+</div>

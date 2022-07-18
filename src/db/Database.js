@@ -24,10 +24,10 @@ class Database {
             this.db.on("trace", data => Log(data));
         }
     
-        await this.db.exec('PRAGMA auto_vacuum = FULL');
-        await this.db.exec('PRAGMA cache_size = 20000');
-        await this.db.exec('PRAGMA synchronous = OFF');
-        await this.db.exec('PRAGMA journal_mode = MEMORY');
+        await this.db.exec("PRAGMA auto_vacuum = FULL");
+        await this.db.exec("PRAGMA cache_size = 20000");
+        await this.db.exec("PRAGMA synchronous = OFF");
+        await this.db.exec("PRAGMA journal_mode = MEMORY");
     }
 
     async schema(schema) {

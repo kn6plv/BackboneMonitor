@@ -86,6 +86,9 @@ Handlebars.registerHelper({
     },
     stringify: function(v) {
         return JSON.stringify(v);
+    },
+    length: function(v) {
+        return v.length;
     }
 });
 

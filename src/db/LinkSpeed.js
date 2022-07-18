@@ -18,14 +18,14 @@ class LinkSpeed {
     async getResults(pastMinutes) {
         Log("getResult:");
         return await db.getAll(
-            `SELECT timestamp, bandwidth FROM link_speedtest WHERE client = '${this.client.name}' AND server = '${this.server.name}' AND timestamp > datetime('now', '-${pastMinutes} minutes') ORDER BY timestamp;`
+            `SELECT timestamp, bandwidth FROM link_speedtest WHERE client = "${this.client.name}" AND server = "${this.server.name}" AND timestamp > datetime("now", "-${pastMinutes} minutes") ORDER BY timestamp;`
         );
     }
 
     async addResult(result) {
         Log("addResult:", result);
         await db.query(
-            `INSERT INTO link_speedtest (timestamp, client, server, bandwidth) VALUES(datetime('now'), '${this.client.name}', '${this.server.name}', ${result.bandwidth});`
+            `INSERT INTO link_speedtest (timestamp, client, server, bandwidth) VALUES(datetime("now"), "${this.client.name}", "${this.server.name}", ${result.bandwidth});`
         );
     }
     

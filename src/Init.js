@@ -33,10 +33,12 @@ const Node = require("./db/Node");
     const fs8 = await S("Fire Stn 8", "W6EI-FS8-SFWEM-LINK");
     const sanrafael = await S("San Rafael", "K6BW-ESR-HAP");
     const black = await S("Black Mtn", "N9JIM-BlackMtn");
-    const sanbruno = await S("San Bruno Mtn", "W2GMD-SANBRUNO-RM5");
+    const sanbruno = await S("San Bruno Mtn", "W2GMD-SANBRUNO-RM5", [ "W2GMD-SANBRUNO-HAP", "W2GMD-SANBRUNO-NSM5" ]);
 
-    await b.addSiteLink(orca, fish, "DTD", 70);
-    await b.addSiteLink(cccc, rfs, "DTD", 10);
+    await b.addSiteLink(orca, fish, "DTD", 80);
+    await b.addSiteLink(cccc, rfs, "DTD", 80);
     await b.addSiteLink(diablo, cccc, "RF", 10);
+    await b.addSiteLink(orca, sanbruno, "DTD", 10);
+    await b.addSiteLink(orca, diablo, "DTD", 10);
 
 })();

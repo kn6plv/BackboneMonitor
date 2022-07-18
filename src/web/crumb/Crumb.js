@@ -7,8 +7,11 @@ class Crumb {
 
     Template = Template
 
-    constructor(config) {
-        this.name = config.name;
+    constructor() {
+    }
+
+    get name() {
+        throw new Error("no name");
     }
 
     get path() {
@@ -48,6 +51,14 @@ class Crumb {
     popCrumb() {
         this.state.breadcrumbs.pop();
         this.state.change = "pop";
+    }
+
+    updateCrumb() {
+        this.state.change = "update";
+    }
+
+    getBackbone() {
+        return this.state.breadcrumbs[0].backbone;
     }
 
 }

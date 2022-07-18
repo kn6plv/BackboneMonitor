@@ -19,19 +19,19 @@ class Backbone {
     }
 
     async addIcon(icon) {
-        await db.query(`INSERT INTO backbone (backbone, icon) VALUES('${this.name}', '${icon}');`);
+        await db.query(`INSERT INTO backbone (backbone, icon) VALUES("${this.name}", "${icon}");`);
     }
 
     async addSite(site) {
-        await db.query(`INSERT INTO backbone_sites (backbone, site) VALUES('${this.name}', '${site.name}');`);
+        await db.query(`INSERT INTO backbone_sites (backbone, site) VALUES("${this.name}", "${site.name}");`);
     }
 
     async addSiteLink(peerA, peerB, type, bandwidth) {
-        await db.query(`INSERT INTO backbone_links (backbone, peerA, peerB, type, bandwidth) VALUES('${this.name}', '${peerA.name}', '${peerB.name}', '${type}', ${bandwidth});`);
+        await db.query(`INSERT INTO backbone_links (backbone, peerA, peerB, type, bandwidth) VALUES("${this.name}", "${peerA.name}", "${peerB.name}", "${type}", ${bandwidth});`);
     }
 
     async getIcon() {
-        const icon = await db.get(`SELECT icon FROM backbone WHERE backbone = '${this.name}';`);
+        const icon = await db.get(`SELECT icon FROM backbone WHERE backbone = "${this.name}";`);
         if (!icon) {
             return null;
         }
@@ -39,18 +39,22 @@ class Backbone {
     }
 
     async getSites() {
-        const sites = await db.getAll(`SELECT site FROM backbone_sites WHERE backbone = '${this.name}' ORDER BY site ASC;`);
+        const sites = await db.getAll(`SELECT site FROM backbone_sites WHERE backbone = "${this.name}" ORDER BY site ASC;`);
         return sites.map(site => Site.getSite(site.site));
     }
 
+    async getSite(site) {
+        return Site.getSite(site);
+    }
+
     async getSiteLinks() {
-        const links = await db.getAll(`SELECT peerA, peerB, type, bandwidth FROM backbone_links WHERE backbone = '${this.name}'`);
+        const links = await db.getAll(`SELECT peerA, peerB, type, bandwidth FROM backbone_links WHERE backbone = "${this.name}"`);
         return links.map(link => SiteLink.getSiteLink(link.peerA, link.peerB, link.type, link.bandwidth));
     }
 
     async getSiteLink(siteA, siteB) {
         Log("getSiteLink:", siteA, siteB);
-        const link = await db.get(`SELECT peerA, peerB, type, bandwidth FROM backbone_links WHERE backbone = '${this.name}' AND peerA = (SELECT node FROM site_nodes WHERE site == '${siteA}') AND peerB = (SELECT node FROM site_nodes WHERE site == '${siteB}')`);
+        const link = await db.get(`SELECT peerA, peerB, type, bandwidth FROM backbone_links WHERE backbone = "${this.name}" AND peerA = (SELECT node FROM site_nodes WHERE site == "${siteA}") AND peerB = (SELECT node FROM site_nodes WHERE site == "${siteB}")`);
         Log(link);
         if (!link) {
             return null;
