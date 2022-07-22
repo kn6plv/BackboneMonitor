@@ -3,7 +3,7 @@ const Log = require("debug")("backbonemonitor");
 const Iperf3 = require("../test/Iperf3");
 const Utils = require("../Utils");
 
-const TICK = 60 * 60; // 1 hour
+const TICK = 15 * 60; // 15 minutes
 const TIMEOUT_NEIGHBOR = 10; // 10 minutes
 
 class BackboneMonitor {

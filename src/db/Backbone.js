@@ -66,6 +66,7 @@ class Backbone {
         Log("getHealth:");
         const sites = await this.getSites();
         const healths = await Promise.all(sites.map(async site => site.getHealth()));
+        Log(healths);
         const uptime = healths.length ? healths.reduce((p, v) => p + v.uptime, 0) / healths.length : 0;
         const health = healths.reduce((p, v) => p !== "bad" && (p === "good" || v.health === "bad") ? v.health : p, "good");
         Log("health:", uptime, health);

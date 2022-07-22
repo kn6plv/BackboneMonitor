@@ -144,6 +144,9 @@
 .sitelink-display .col {
     width: 500px;
 }
+.sitelink-display .stats {
+    padding-bottom: 16px;
+}
 .col-header {
     color: var(--minor-text-color);
     font-variant: small-caps;
@@ -193,7 +196,8 @@
     background-size: contain;
 }
 
-.node-display .col .label {
+.node-display .col .label,
+.label {
     display: inline-block;
     width: 100px;
     color: var(--minor-text-color);
@@ -201,7 +205,8 @@
     vertical-align: super;
     font-size: 12px;
 }
-.node-display .col .value {
+.node-display .col .value,
+.value {
     display: inline-block;
     width: 300px;
     font-size: 12px;

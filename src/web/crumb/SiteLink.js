@@ -24,6 +24,7 @@ class SiteLink extends Crumb {
         const healthB = await this.link.peerB.getHealth();
         const locA = await this.siteA.getLocation();
         const locB = await this.siteB.getLocation();
+        const distance = Utils.getDistance(locA, locB)
 
         const graphs = new SpeedGraph(this);
 
@@ -41,6 +42,8 @@ class SiteLink extends Crumb {
             info: {
                 siteA: this.siteA.name,
                 siteB: this.siteB.name,
+                distance: distance.toFixed(1),
+                avgs: (await graphs.getAverages()).map(v => v.toFixed(2)),
                 health: health,
                 nodeA: { name: Utils.shortHostname(this.link.peerA.name), health: healthA },
                 nodeB: { name: Utils.shortHostname(this.link.peerB.name), health: healthB },

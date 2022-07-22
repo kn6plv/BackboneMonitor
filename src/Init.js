@@ -27,18 +27,18 @@ const Node = require("./db/Node");
 
     const orca = await S("ORCA", "KJ6WEG-OAK-ORCA-hap", [ "KJ6WEG-OAK-ORCA-nsm5", "KJ6WEG-OAK-ORCA-pbm5", "KJ6WEG-OAK-ORCA-sectorti" ])
     const fish = await S("Fish Ranch", "KJ6WEG-OAK-FishRanch-SectorM5", [ "KJ6WEG-OAK-FishRanch-PBM5" ]);
-    const rfs = await S("Richmond Field Stn", "W6BB-RFS-HUB4");
-    const diablo = await S("Mount Diablo", "NB6F");
-    const cccc = await S("CCCC", "WA6KQB-CCCC-PBr5");
-    const fs8 = await S("Fire Stn 8", "W6EI-FS8-SFWEM-LINK");
-    const sanrafael = await S("San Rafael", "K6BW-ESR-HAP");
-    const black = await S("Black Mtn", "N9JIM-BlackMtn");
-    const sanbruno = await S("San Bruno Mtn", "W2GMD-SANBRUNO-RM5", [ "W2GMD-SANBRUNO-HAP", "W2GMD-SANBRUNO-NSM5" ]);
+    const rfs = await S("Richmond Field Stn", "W6BB-RFS-HUB4", [ "W6BB-PB5-RFS", "W6BB-RFS-LHG-XL2", "W6BB-RFS-NS5-SFBAY" ]);
+    const diablo = await S("Mount Diablo", "W6CX-NORTH-HUB1");
+    const cccc = await S("CCCC", "WA6KQB-CCCC-M2", [ "WA6KQB-CCCC-PBr5", "WA6KQB-CCCC-NorthSector" ]);
+    //const fs8 = await S("Fire Stn 8", "W6EI-FS8-SFWEM-LINK");
+    const sanrafael = await S("San Rafael", "K6BW-ESR-HAP", [ "K6BW-ESR-MLHG5", "K6BW-ESR-SEC120", "K6BW-ESR-W-MLHG5", "KJ6DZB-ESR-MLHGXL5-East-Dish" ]);
+    const black = await S("Black Mtn", "N9JIM-HAP1", [ "N9JIM-BlackMtn" ]);
+    //const sanbruno = await S("San Bruno Mtn", "W2GMD-SANBRUNO-RM5", [ "W2GMD-SANBRUNO-HAP", "W2GMD-SANBRUNO-NSM5" ]);
 
     await b.addSiteLink(orca, fish, "DTD", 80);
     await b.addSiteLink(cccc, rfs, "DTD", 80);
-    await b.addSiteLink(diablo, cccc, "RF", 10);
-    await b.addSiteLink(orca, sanbruno, "DTD", 10);
-    await b.addSiteLink(orca, diablo, "DTD", 10);
+    await b.addSiteLink(diablo, cccc, "DTD", 10);
+    //await b.addSiteLink(fish, sanbruno, "DTD", 10);
+    //await b.addSiteLink(orca, diablo, "DTD", 10);
 
 })();

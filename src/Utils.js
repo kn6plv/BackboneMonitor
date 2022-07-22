@@ -2,6 +2,7 @@
 const Log = require("debug")("utils");
 const fetch = require("node-fetch");
 const AbortController = require("abort-controller").AbortController;
+const Turf = require('@turf/turf');
 
 const BANDWIDTH_GOOD = 70;
 const BANDWIDTH_POOR = 50;
@@ -125,6 +126,12 @@ const Utils = {
         else {
             return "good"
         }
+    },
+
+    getDistance(from, to, units) {
+        const dfrom = Turf.point([ from.lon, from.lat ]);
+        const dto = Turf.point([ to.lon, to.lat ]);
+        return Turf.distance(dfrom, dto, { units: units || "miles" });
     }
 
 };
