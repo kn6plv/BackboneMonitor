@@ -48,7 +48,7 @@ function runMessageManager() {
     }
   });
   ws.addEventListener('open', () => {
-    send("init", { path: location.hash.split("#").map(p => decodeURIComponent(p)).slice(1) });
+    send("init", { path: location.hash.slice(1).split("@").map(p => decodeURIComponent(p)) });
   });
   setInterval(() => send('keepalive'), 30 * 1000);
 }
@@ -116,7 +116,7 @@ onMessage['page.change'] = msg => {
 
 window.addEventListener('pageshow', runMessageManager);
 window.addEventListener('hashchange', () => {
-  send("select", { path: location.hash.split("#").map(p => decodeURIComponent(p)).slice(1) });
+  send("select", { path: location.hash.slice(1).split("@").map(p => decodeURIComponent(p)) });
 });
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {

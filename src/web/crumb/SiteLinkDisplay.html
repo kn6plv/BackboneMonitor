@@ -6,7 +6,7 @@
             <div id="info-header">
                 <div class="site-link-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
                     <div class="link">
-                        <div class="name"><a href="{{../path}}#{{siteA}}">{{siteA}}</a></div><div class="join">&nbsp;</div><div class="name"><a href="{{../path}}#{{siteB}}">{{siteB}}</a></div>
+                        <div class="name"><a href="{{../path}}@{{siteA}}">{{siteA}}</a></div><div class="join">&nbsp;</div><div class="name"><a href="{{../path}}@{{siteB}}">{{siteB}}</a></div>
                     </div>
                     <div class="health">Now: <span class="status">{{health.health}}</span></div>
                     <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>
@@ -18,11 +18,11 @@
             </div>
             <div class="col-header">{{siteA}}</div>
             {{#with nodeA}}
-            {{> NodeHealth path=(concat ../../path "#" ../siteA) }}
+            {{> NodeHealth path=(concat ../../path "@" ../siteA) }}
             {{/with}}
             <div class="col-header">{{siteB}}</div>
             {{#with nodeB}}
-            {{> NodeHealth path=(concat ../../path "#" ../siteB) }}
+            {{> NodeHealth path=(concat ../../path "@" ../siteB) }}
             {{/with}}
         </div>
         <div class="col">

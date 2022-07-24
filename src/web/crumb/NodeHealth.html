@@ -1,5 +1,5 @@
 <div class="node-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
-    <a href="{{path}}#{{name}}">
+    <a href="{{path}}@{{name}}">
         <div class="name">{{name}}</div>
         <div class="health">Now: <span class="status">{{health.health}}</span></div>
         <div class="uptime">Uptime: <span class="status">{{health.uptime}}%</span></div>

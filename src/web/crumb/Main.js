@@ -3,16 +3,8 @@ const Crumb = require("./Crumb");
 
 class CrumbMain extends Crumb {
 
-    constructor(root) {
-        super("");
-        this.root = root;
-    }
-
     async html() {
-        return this.Template.Main({
-            content: await this.root.html(),
-            title: this.root.breadcrumbs()
-        });
+        return this.Template.Main({});
     }
 }
 

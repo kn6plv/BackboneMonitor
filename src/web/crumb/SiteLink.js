@@ -15,10 +15,12 @@ class SiteLink extends Crumb {
         return `${this.siteA.name}+${this.siteB.name}`;
     }
 
-    async html() {
+    async init() {
         this.siteA = await this.link.peerA.getSite();
         this.siteB = await this.link.peerB.getSite();
+    }
 
+    async html() {
         const health = await this.link.getHealth();
         const healthA = await this.link.peerA.getHealth();
         const healthB = await this.link.peerB.getHealth();
@@ -68,10 +70,10 @@ class SiteLink extends Crumb {
         else {
             // Navigate to site
             const site = await this.getBackbone().getSite(selection[0]);
-            this.pushCrumb("Site", { site: site });
-            if (selection.length > 1) {
+            await this.pushCrumb("Site", { site: site });
+            if (selection[1]) {
                 // Navigate to node at site
-                this.pushCrumb("Node", { node: await site.getNode(selection[1]) });
+                await this.pushCrumb("Node", { node: await site.getNode(selection[1]) });
             }
         }
     }

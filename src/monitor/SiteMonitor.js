@@ -32,13 +32,20 @@ class SiteMonitor {
         Log("testLocalLinks:");
         const root = await this.site.getRootNode();
         const nodes = await this.site.getNodes();
+        const fails = {};
         for (let i = 0; i < nodes.length; i++) {
             if (nodes[i].name !== root.name) {
                 const test = new Iperf3({
                     client: root.name,
                     server: nodes[i].name
                 });
-                await root.updateLinkSpeed(nodes[i], await test.run());
+                const results = await test.run();
+                if (!results && !fails[nodes[i].name]) {
+                    fails[nodes[i].name] = true;
+                }
+                else {
+                    await root.updateLinkSpeed(nodes[i], results);
+                }
             }
         }
     }

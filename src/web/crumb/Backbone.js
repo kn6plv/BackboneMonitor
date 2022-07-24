@@ -5,17 +5,15 @@ const Backbone = require("../../db/Backbone");
 
 class CrumbBackbone extends Crumb {
 
-    constructor() {
-        super();
-    }
-
     get name() {
         return this.backbone.name;
     }
 
-    async html() {
+    async init() {
         this.backbone = (await Backbone.getAll())[0];
-    
+    }
+
+    async html() {
         const sites = (await Promise.all((await this.backbone.getSites()).map(async site => {
             return {
                 name: site.name,
@@ -61,6 +59,11 @@ class CrumbBackbone extends Crumb {
         });
     }
 
+    async cmd_init(msg) {
+        await this.cmd_select(msg);
+        this.state.change = "update";
+    }
+
     async cmd_select(msg) {
         Log("cmd_select:", msg);
         const selection = this.stripPath(msg.value.path);
@@ -69,11 +72,22 @@ class CrumbBackbone extends Crumb {
             const link = selection[0].split("+");
             if (link.length === 2) {
                 // Navigate to site link
-                this.pushCrumb("SiteLink", { name: selection[0], link: await this.backbone.getSiteLink(link[0], link[1]) });
+                await this.pushCrumb("SiteLink", { name: selection[0], link: await this.backbone.getSiteLink(link[0], link[1]) });
+                if (selection[1]) {
+                    const site = await this.backbone.getSite(selection[1]);
+                    await this.pushCrumb("Site", { site: site });
+                    if (selection[2]) {
+                        await this.pushCrumb("Node", { node: await site.getNode(selection[2]) });
+                    }
+                }
             }
             else {
                 // Navigate to site
-                this.pushCrumb("Site", { name: selection[0], site: await this.backbone.getSite(selection[0]) });
+                const site = await this.backbone.getSite(selection[0]);
+                await this.pushCrumb("Site", { site: site });
+                if (selection[1]) {
+                    await this.pushCrumb("Node", { node: await site.getNode(selection[1]) });
+                }
             }
         }
     }

@@ -14,16 +14,19 @@ class Crumb {
         throw new Error("no name");
     }
 
+    async init() {
+    }
+
     get path() {
         const b = this.state.breadcrumbs;
         let path = "";
         for (let i = 0; i < b.length; i++) {
-            path = `${path}#${b[i].name}`;
+            path = `${path}@${b[i].name}`;
             if (b[i] === this) {
                 break;
             }
         }
-        return path;
+        return `#${path.substring(1)}`;
     }
 
     stripPath(path) {
@@ -40,10 +43,11 @@ class Crumb {
         this.state.send();
     }
 
-    pushCrumb(name, config) {
+    async pushCrumb(name, config) {
         const Ncrumb = require(`./${name}`);
         const crumb = new Ncrumb(config);
         crumb.state = this.state;
+        await crumb.init();
         this.state.breadcrumbs.push(crumb);
         this.state.change = "push";
     }

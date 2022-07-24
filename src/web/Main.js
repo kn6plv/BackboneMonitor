@@ -5,11 +5,7 @@ const CrumbBackbone = require("./crumb/Backbone");
 
 async function HTML(ctx) {
     Log("loading:");
-    const root = new CrumbBackbone();
-    root.state = {
-        breadcrumbs: [ root ]
-    };
-    ctx.body = await new CrumbMain(root).html();
+    ctx.body = await new CrumbMain().html();
     ctx.type = "text/html";
 }
 
@@ -47,7 +43,6 @@ async function WS(ctx) {
     const root = new CrumbBackbone();
     root.state = State;
     State.breadcrumbs.push(root);
-    await root.html();
 
     ctx.websocket.on('error', () => {
          ctx.websocket.close();
@@ -57,6 +52,7 @@ async function WS(ctx) {
     ctx.websocket.on('message', async data => {
         try {
             const msg = JSON.parse(data);
+            Log("msg", msg);
             const cmd = `cmd_${msg.cmd || "missing"}`;
             State.change = "none";
             const dispatch = async () => {
@@ -72,8 +68,12 @@ async function WS(ctx) {
                 if (fn) {
                     q.push(async () => {
                         try {
-                            Log(msg);
+                            if (!root.backbone) {
+                                await root.init();
+                            }
+                            Log("exec", msg);
                             await fn.call(ctx, msg);
+                            Log(State);
                             switch (State.change) {
                                 case "push":
                                 case "update":
