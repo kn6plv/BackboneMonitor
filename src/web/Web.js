@@ -30,6 +30,7 @@ const Web = {
         }
         });
         Web.listen({
+            host: "0.0.0.0",
             port: webport
         });
     }
