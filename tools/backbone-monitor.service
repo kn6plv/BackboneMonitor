@@ -3,7 +3,7 @@ Description=BAM Backbone Monitor
 
 [Service]
 Type=simple
-ExecStart=./Main.js
+ExecStart=/root/BackboneMonitor/src/Main.js
 Restart=on-failure
 User=root
 WorkingDirectory=/root/BackboneMonitor/src
