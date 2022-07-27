@@ -3,6 +3,7 @@ Description=BAM Backbone Monitor
 
 [Service]
 Type=simple
+Environment="PORT=80"
 ExecStart=/root/BackboneMonitor/src/Main.js
 Restart=on-failure
 User=root
