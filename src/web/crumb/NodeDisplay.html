@@ -12,6 +12,7 @@
         <div class="col">
             {{#with basics}}
             <div><div class="label">Description</div><div class="value">{{description}}</div></div>
+            <div><div class="label">Avg. Bandwidth</div><div class="value">{{../avgs.[0]}} Mbps / {{../avgs.[1]}} Mbps</div></div>
             <div><div class="label">Hardware</div><div class="value">{{hardware}}</div></div>
             <div><div class="label">Firmware</div><div class="value">{{firmware}}</div></div>
             {{#if channel}}
@@ -25,7 +26,14 @@
             {{/with}}
         </div>
         <div class="col">
-
+            {{#with speed}}
+            {{#if graphs}}
+            <div class="speedgraph-title">Internal Bandwidth <span>(max {{mbps}}Mbps)</span></div>
+            {{#each graphs}}
+            {{> SpeedGraphDisplay }}
+            {{/each}}
+            {{/if}}
+            {{/with}}
         </div>
     </div>
     {{/with}}

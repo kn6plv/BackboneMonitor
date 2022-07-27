@@ -2,6 +2,7 @@
 const Log = require("debug")("crumb:site");
 const Crumb = require("./Crumb");
 const Utils = require("../../Utils");
+const SpeedGraph  = require("./SpeedGraph");
 
 class Node extends Crumb {
 
@@ -15,13 +16,34 @@ class Node extends Crumb {
     }
 
     async html() {
+        const site = await this.node.getSite();
         const health = await this.node.getHealth();
         const basics = await this.node.getBasics();
-        let location = await this.node.getLocation();
-        if (!location) {
-            location = await (await this.node.getSite()).getLocation();
+        const location = await site.getLocation();
+        const root = await site.getRootNode();
+
+        let graphs;
+        if (root.name === this.node.name) {
+            // We dont have any bandwidth graphs from the root node to itself, so
+            // we pick an alternative site node and use it's value (but flipped).
+            graphs = new SpeedGraph(this.name, site.name, {
+                bandwidth: this.node.bandwidth,
+                getBandwidthResults: async (past) => {
+                    const sitenodes = await site.getNodes();
+                    const altnode = sitenodes.find(n => n.name !== this.node.name);
+                    if (altnode) {
+                        const r = await altnode.getBandwidthResults(past);
+                        return [ r[1], r[0] ];
+                    }
+                    else {
+                        return await this.node.getBandwidthResults(past);
+                    }
+                }
+            });
         }
-        location = await (await this.node.getSite()).getLocation();
+        else {
+            graphs = new SpeedGraph(this.name, site.name, this.node);
+        }
 
         return this.Template.NodeDisplay({
             path: this.path,
@@ -35,7 +57,12 @@ class Node extends Crumb {
             info: {
                 node: this.name,
                 health: health,
-                basics: basics
+                basics: basics,
+                avgs: (await graphs.getAverages()).map(v => v.toFixed(2)),
+                speed: {
+                    mbps: 80,
+                    graphs: await graphs.data()
+                }
             }
         });
     }

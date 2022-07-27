@@ -28,7 +28,7 @@ class Site extends Crumb {
                 l: location,
                 h: await root.getHealth(),
                 t: name,
-                r: `${this.path}@${name}`,
+                r: `${this.path}@${name}`
             });
         }
         else {
@@ -40,7 +40,7 @@ class Site extends Crumb {
                     l: nlocation,
                     h: await nodes[i].getHealth(),
                     t: name,
-                    r: `${this.path}@${name}`,
+                    r: `${this.path}@${name}`
                 });
             }
         }

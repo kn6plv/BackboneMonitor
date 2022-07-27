@@ -33,7 +33,7 @@ class CrumbBackbone extends Crumb {
             path: `#${this.name}`,
             map: {
                 dots: sites.filter(site => site.location).map(site => {
-                    return { l: site.location, h: site.health, t: site.name, r: `#${this.name}#${site.name}` };
+                    return { l: site.location, h: site.health, t: site.name, r: `#${this.name}@${site.name}` };
                 }),
                 lines: links.map(link => {
                     return {

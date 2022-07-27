@@ -28,14 +28,14 @@ class SiteLink extends Crumb {
         const locB = await this.siteB.getLocation();
         const distance = Utils.getDistance(locA, locB)
 
-        const graphs = new SpeedGraph(this);
+        const graphs = new SpeedGraph(this.siteA.name, this.siteB.name, this.link);
 
         return this.Template.SiteLinkDisplay({
             path: this.path,
             map: {
                 dots: [
-                    { l: locA, h: healthA },
-                    { l: locB, h: healthB }
+                    { l: locA, h: healthA, t: this.siteA.name, r: `${this.path}@${this.siteA.name}` },
+                    { l: locB, h: healthB, t: this.siteB.name, r: `${this.path}@${this.siteB.name}` }
                 ],
                 lines: [
                     { a: locA, b: locB, h: health }

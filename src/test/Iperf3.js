@@ -9,10 +9,21 @@ class IPerf3 {
         this.server = config.server;
         this.protocol = config.protocol || "tcp";
         this.timeout = config.timeout || 20;
+        this.retries = config.retries || 2;
     }
 
     async run() {
         Log(`run: client ${this.client} <- server ${this.server} (${this.protocol})`);
+        for (let i = 0; i < this.retries; i++) {
+            const results = await this.runTest();
+            if (results) {
+                return results;
+            }
+        }
+        return null;
+    }
+
+    async runTest() {
         return await Utils.mark([ this.client, this.server ], async () => {
             Log("running:");
             let iperf = null;
