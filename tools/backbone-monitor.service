@@ -1,0 +1,12 @@
+[Unit]
+Description=BAM Backbone Monitor
+
+[Service]
+Type=simple
+ExecStart=./Main.js
+Restart=on-failure
+User=root
+WorkingDirectory=/root/BackboneMonitor/src
+
+[Install]
+WantedBy=multi-user.target
