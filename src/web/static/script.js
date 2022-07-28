@@ -7,7 +7,7 @@ function watchAndReload() {
     const TIMEOUT = 10000;
     function reload() {
       const req = new XMLHttpRequest();
-      req.open('GET', window.location);
+      req.open('GET', window.location.toString());
       req.onreadystatechange = function() {
         if (req.readyState === 4) {
           if (req.status === 200) {
