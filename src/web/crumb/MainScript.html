@@ -8,7 +8,26 @@
         icons: { good: L.divIcon({ className: "green-dot-16", iconSize: [ 16, 16 ] }), poor: L.divIcon({ className: "orange-dot-16", iconSize: [ 16, 16 ] }), bad: L.divIcon({ className: "red-dot-16", iconSize: [ 16, 16 ] }) }
     };
     window.map.group = L.layerGroup().addTo(map.map);
-    //L.tileLayer("http://kn6plv-tiles.local.mesh/tile/{z}/{x}/{y}.png", {}).addTo(window.map.map);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {}).addTo(window.map.map);
-    //window.map.map.setView([ 37.7, -122.0 ], 10, { animate: false });
+    Promise.race([
+        new Promise(resolve => {
+            const r = new XMLHttpRequest();
+            r.timeout = 1000;
+            r.onload = () => {
+                resolve("http://kn6plv-tiles.local.mesh/tile/{z}/{x}/{y}.png");
+            };
+            r.open("GET", "http://kn6plv-tiles.local.mesh/tile/10/164/395.png");
+            r.send();
+        }),
+        new Promise(resolve => {
+            const r = new XMLHttpRequest();
+            r.timeout = 1000;
+            r.onload = () => {
+                resolve("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+            };
+            r.open("GET","https://c.tile.openstreetmap.org/10/162/395.png");
+            r.send();
+        })
+    ]).then(url => {
+        L.tileLayer(url, {}).addTo(window.map.map);
+    });
 </script>
