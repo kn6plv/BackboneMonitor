@@ -196,16 +196,14 @@
     background-size: contain;
 }
 
-.node-display .col .label,
 .label {
     display: inline-block;
-    width: 100px;
+    width: 120px;
     color: var(--minor-text-color);
     font-variant: small-caps;
     vertical-align: super;
     font-size: 12px;
 }
-.node-display .col .value,
 .value {
     display: inline-block;
     width: 300px;
