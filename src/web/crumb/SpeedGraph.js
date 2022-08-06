@@ -46,10 +46,10 @@ class SpeedGraph {
 
     async getAverages() {
         const results2 = await this._getResults();
-        return [
+        return results2 ? [
             results2[0].reduce((a, v) => a + v.bandwidth, 0) / (results2[0].length || 1),
             results2[1].reduce((a, v) => a + v.bandwidth, 0) / (results2[1].length || 1)
-        ];
+        ] : [];
     }
 
 }

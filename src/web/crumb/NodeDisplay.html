@@ -30,7 +30,7 @@
             {{#if graphs}}
             <div class="speedgraph-title">Internal Bandwidth <span>(max {{mbps}}Mbps)</span></div>
             {{#each graphs}}
-            {{> SpeedGraphDisplay }}
+            {{> SpeedGraphDisplay step=1 }}
             {{/each}}
             {{/if}}
             {{/with}}

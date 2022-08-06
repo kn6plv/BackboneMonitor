@@ -29,7 +29,7 @@
             {{#with speed}}
             <div class="speedgraph-title">Bandwidth <span>(max {{mbps}}Mbps)</span></div>
             {{#each graphs}}
-            {{> SpeedGraphDisplay }}
+            {{> SpeedGraphDisplay step=4 }}
             {{/each}}
             {{/with}}
         </div>
