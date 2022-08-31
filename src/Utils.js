@@ -26,22 +26,24 @@ const Utils = {
     },
 
     //
-    // Fetch 'text' or 'json' data from the url, with a timeout.
+    // Fetch 'text' or 'json' data from the url, with a timeout and retry
     //
-    async fetchWithTimeout(url, returnType, timeout) {
-        Log("fetchWithTimeout:", url);
-        const ac = new AbortController();
-        const tm = setTimeout(() => ac.abort(), timeout * 1000);
-        try {
-            const response = await fetch(url, { signal: ac.signal });
-            const val = await response[returnType]();
-            clearTimeout(tm);
-            return val;
+    async fetchWithTimeoutAndRetry(url, returnType, timeout, retry) {
+        Log("fetchWithTimeoutAndRetry:", url);
+        for (; retry >= 0; retry--) {
+            const ac = new AbortController();
+            const tm = setTimeout(() => ac.abort(), timeout * 1000);
+            try {
+                const response = await fetch(url, { signal: ac.signal });
+                const val = await response[returnType]();
+                clearTimeout(tm);
+                return val;
+            }
+            catch (_) {
+                clearTimeout(tm);
+            }
         }
-        catch (_) {
-            clearTimeout(tm);
-            return null;
-        }
+        return null;
     },
 
     //

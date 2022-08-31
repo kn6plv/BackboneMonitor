@@ -27,7 +27,7 @@ class IPerf3 {
         return await Utils.mark([ this.client, this.server ], async () => {
             Log("running:");
             let iperf = null;
-            const text = await Utils.fetchWithTimeout(`http://${this.client}:8080/cgi-bin/iperf?server=${this.server}&protocol=${this.protocol}`, "text", this.timeout);
+            const text = await Utils.fetchWithTimeoutAndRetry(`http://${this.client}:8080/cgi-bin/iperf?server=${this.server}&protocol=${this.protocol}`, "text", this.timeout, 0);
             if (text) {
                 const patt = [
                     { p: /([\d\.]+)\sMbits\/sec.+\(([\d\.]+)%.*receiver/g,  e: m => { return { bandwidth: parseFloat(m[1]) } } },
