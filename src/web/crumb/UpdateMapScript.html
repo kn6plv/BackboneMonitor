@@ -2,8 +2,16 @@
     map.group.clearLayers();
     const all = [];
     let m;
+    let l;
     {{#each map.lines}}
-    L.polyline([[{{a.lat}},{{a.lon}}],[{{b.lat}},{{b.lon}}]], { color: map.colors.{{h.health}}, weight: 2 }).addTo(map.group);
+    l = L.polyline([[{{a.lat}},{{a.lon}}],[{{b.lat}},{{b.lon}}]], { color: map.colors.{{h.health}}, weight: 2 });
+    {{#if t}}
+    l.bindTooltip("{{t}}");
+    {{/if}}
+    {{#if r}}
+    l.on("click", () => location.hash = "{{r}}")
+    {{/if}}
+    l.addTo(map.group);
     {{/each}}
     {{#each map.dots}}
     m = L.marker([{{l.lat}},{{l.lon}}], { icon: map.icons.{{h.health}} });

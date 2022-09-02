@@ -33,13 +33,22 @@ class CrumbBackbone extends Crumb {
             path: `#${this.name}`,
             map: {
                 dots: sites.filter(site => site.location).map(site => {
-                    return { l: site.location, h: site.health, t: site.name, r: `#${this.name}@${site.name}` };
+                    return {
+                        l: site.location,
+                        h: site.health,
+                        t: site.name,
+                        r: `#${this.name}@${site.name}`
+                    };
                 }),
                 lines: links.map(link => {
+                    const siteA = sites.find(site => site.name == link.peerA);
+                    const siteB = sites.find(site => site.name == link.peerB);
                     return {
-                        a: sites.find(site => site.name == link.peerA).location,
-                        b: sites.find(site => site.name == link.peerB).location,
-                        h: link.health
+                        a: siteA.location,
+                        b: siteB.location,
+                        h: link.health,
+                        t: `${siteA.name} ↔ ${siteB.name}`,
+                        r: `#${this.name}@${siteA.name}+${siteB.name}`
                     };
                 })
             },
