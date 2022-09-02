@@ -7,7 +7,7 @@ class IPerf3 {
     constructor(config) {
         this.client = config.client;
         this.server = config.server;
-        this.protocol = config.protocol || "tcp";
+        this.protocol = config.protocol || "udp";
         this.timeout = config.timeout || 30;
         this.retries = config.retries || 3;
     }
