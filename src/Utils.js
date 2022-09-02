@@ -28,8 +28,8 @@ const Utils = {
     //
     // Fetch 'text' or 'json' data from the url, with a timeout and retry
     //
-    async fetchWithTimeoutAndRetry(url, returnType, timeout, retry) {
-        Log("fetchWithTimeoutAndRetry:", url);
+    async XfetchWithTimeoutAndRetry(url, returnType, timeout, retry) {
+        Log("fetchWithTimeoutAndRetry:", url, returnType, timeout, retry);
         for (; retry >= 0; retry--) {
             const ac = new AbortController();
             const tm = setTimeout(() => ac.abort(), timeout * 1000);
@@ -39,8 +39,36 @@ const Utils = {
                 clearTimeout(tm);
                 return val;
             }
-            catch (_) {
+            catch (e) {
+                Log(e);
                 clearTimeout(tm);
+            }
+        }
+        return null;
+    },
+
+    async fetchWithTimeoutAndRetry(url, returnType, timeout, retry) {
+        Log("fetchWithTimeoutAndRetry:", url, returnType, timeout, retry);
+        for (; retry >= 0; retry--) {
+            const val = await new Promise(resolve => {
+                const tm = setTimeout(() => resolve(null), timeout * 1000);
+                fetch(url).then(response => {
+                    response[returnType]().then(val => {
+                        clearTimeout(tm);
+                        resolve(val);
+                    }).catch(e => {
+                        Log(e);
+                        clearTimeout(tm);
+                        resolve(null);
+                    });
+                }).catch(e => {
+                    Log(e);
+                    clearTimeout(tm);
+                    resolve(null);
+                });
+            });
+            if (val) {
+                return val;
             }
         }
         return null;

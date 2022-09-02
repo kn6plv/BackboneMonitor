@@ -8,8 +8,8 @@ class IPerf3 {
         this.client = config.client;
         this.server = config.server;
         this.protocol = config.protocol || "tcp";
-        this.timeout = config.timeout || 20;
-        this.retries = config.retries || 2;
+        this.timeout = config.timeout || 30;
+        this.retries = config.retries || 3;
     }
 
     async run() {
@@ -28,6 +28,7 @@ class IPerf3 {
             Log("running:");
             let iperf = null;
             const text = await Utils.fetchWithTimeoutAndRetry(`http://${this.client}:8080/cgi-bin/iperf?server=${this.server}&protocol=${this.protocol}`, "text", this.timeout, 0);
+            Log("ran:", this.client, this.server, text);
             if (text) {
                 const patt = [
                     { p: /([\d\.]+)\sMbits\/sec.+\(([\d\.]+)%.*receiver/g,  e: m => { return { bandwidth: parseFloat(m[1]) } } },

@@ -129,6 +129,7 @@ class Node {
     }
 
     async updateLinkSpeed(linkNode, result) {
+        Log(this.name, linkNode.name, result);
         const link = new LinkSpeed(this, linkNode);
         await link.addResult(result ? result : { bandwidth: 0 });
     }
