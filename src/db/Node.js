@@ -113,7 +113,7 @@ class Node {
                 const link = sysinfo.link_info[ip];
                 const key = `${this.name}/${ip}/${link.linkType || "DTD"}`;
                 await db.query(
-                    `INSERT INTO nodes_neighbors (timestamp,key,  name, neighbor, type) VALUES(datetime("now"), "${key}", "${this.name}", "${Utils.canonicalHostname(link.hostname) || ""}", "${link.linkType || "DTD"}")`
+                    `INSERT INTO nodes_neighbors (timestamp, key, name, neighbor, type) VALUES(datetime("now"), "${key}", "${this.name}", "${Utils.canonicalHostname(link.hostname) || ""}", "${link.linkType || "DTD"}")`
                 );
             }
         }
