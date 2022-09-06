@@ -4,7 +4,7 @@ const Utils = require("../Utils");
 
 const TIMEOUT_SYSINFO = 5;
 const RETRY_SYSINFO = 1;
-const TICK1 = 5 * 60; // 5 minutes
+const TICK = 5 * 60; // 5 minutes
 
 class NodeMonitor {
 
@@ -27,7 +27,7 @@ class NodeMonitor {
                     await this.node.updateReachable({ reachable: false });
                 }
 
-                await Utils.sleep(TICK1 - (Date.now() - start) / 1000);
+                await Utils.sleep(TICK - (Date.now() - start) / 1000);
             }
             catch (e) {
                 Log(e);

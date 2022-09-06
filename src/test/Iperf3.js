@@ -15,9 +15,14 @@ class IPerf3 {
     async run() {
         Log(`run: client ${this.client} <- server ${this.server} (${this.protocol})`);
         for (let i = 0; i < this.retries; i++) {
-            const results = await this.runTest();
-            if (results) {
-                return results;
+            try {
+                const results = await this.runTest();
+                if (results) {
+                    return results;
+                }
+            }
+            catch (e) {
+                Log(e);
             }
         }
         return null;
