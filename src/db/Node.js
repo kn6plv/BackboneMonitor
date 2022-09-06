@@ -74,7 +74,7 @@ class Node {
         return {
             bandwidth: bandwidth,
             uptime: uptime,
-            health: Utils.getHealthStatus(bandwidth, uptime)
+            health: Utils.getHealthStatus(100 * bandwidth / DEFAULT_BANDWIDTH, uptime)
         };
     }
 
