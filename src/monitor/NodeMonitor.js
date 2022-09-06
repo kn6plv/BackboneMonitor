@@ -14,25 +14,21 @@ class NodeMonitor {
 
     async run() {
         for (;;) {
+            const start = Date.now();
             try {
-                const start = Date.now();
-
                 const sysinfo = await Utils.mark(this.node.name, async () => await Utils.fetchWithTimeoutAndRetry(`http://${this.node.name}:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, "json", TIMEOUT_SYSINFO, RETRY_SYSINFO));
                 if (sysinfo) {
                     await this.node.updateBasics(sysinfo);
                     await this.node.updateNeighbors(sysinfo);
                     await this.node.updateReachable({ reachable: true });
                 }
-                else {
-                    await this.node.updateReachable({ reachable: false });
-                }
-
-                await Utils.sleep(TICK - (Date.now() - start) / 1000);
+                await this.node.updateReachable({ reachable: !!sysinfo });
             }
             catch (e) {
                 Log(e);
-                break;
+                await this.node.updateReachable({ reachable: false });
             }
+            await Utils.sleep(TICK - (Date.now() - start) / 1000);
         }
     }
 
