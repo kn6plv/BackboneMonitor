@@ -20,7 +20,6 @@ class NodeMonitor {
                 if (sysinfo) {
                     await this.node.updateBasics(sysinfo);
                     await this.node.updateNeighbors(sysinfo);
-                    await this.node.updateReachable({ reachable: true });
                 }
                 await this.node.updateReachable({ reachable: !!sysinfo });
             }
