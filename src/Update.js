@@ -32,7 +32,8 @@ const Node = require("./db/Node");
         }
     }
 
-    await addSite("San Bruno Mtn", "W2GMD-SANBRUNO-RM5", [ "W2GMD-SANBRUNO-HAP", "W2GMD-SANBRUNO-NSM5" ]);
-
+    const bruno = await (await b.getSite("San Bruno Mtn")).getRootNode();
+    const carlos = await addSite("San Carlos", "aj6vv-sc-90sect-86", [ "aj6vv-sc-90sect-345", "aj6vv-sc-90sect-26-175" ]);
+    await b.addSiteLink(bruno, carlos, "DTD", 80);
 
 })();
