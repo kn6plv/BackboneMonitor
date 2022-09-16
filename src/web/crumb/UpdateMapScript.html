@@ -27,8 +27,8 @@
     {{/unless}}
     {{/each}}
     {{#with map.center}}
-    map.map.fitBounds(L.latLngBounds([[{{lat}},{{lon}}]]), { animate: false, maxZoom: 18, paddingBottomRight: [ 0, document.getElementById("info").offsetHeight ] });
+    map.map.fitBounds(L.latLngBounds([[{{lat}},{{lon}}]]), { animate: false, maxZoom: 18, paddingBottomRight: [ 0, document.getElementById("info-box").offsetHeight ] });
     {{else}}
-    map.map.fitBounds(L.latLngBounds(all), { animate: false, maxZoom: 18, paddingBottomRight: [ 0, document.getElementById("info").offsetHeight ] });
+    map.map.fitBounds(L.latLngBounds(all), { animate: false, maxZoom: 18, paddingBottomRight: [ 0, document.getElementById("info-box").offsetHeight ] });
     {{/with}}
 </script>
