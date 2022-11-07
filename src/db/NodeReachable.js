@@ -30,4 +30,10 @@ class NodeReachable {
     
 }
 
+NodeReachable.truncateResults = async (pastMinutes) => {
+    await db.query(
+        `DELETE FROM node_reachable WHERE timestamp < datetime("now", "-${pastMinutes} minutes");`
+    );
+}
+
 module.exports = NodeReachable;

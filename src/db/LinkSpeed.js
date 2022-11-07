@@ -31,4 +31,10 @@ class LinkSpeed {
     
 }
 
+LinkSpeed.truncateResults = async (pastMinutes) => {
+    await db.query(
+        `DELETE FROM link_speedtest WHERE timestamp < datetime("now", "-${pastMinutes} minutes");`
+    );
+}
+
 module.exports = LinkSpeed;

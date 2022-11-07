@@ -1,10 +1,13 @@
 
 const Log = require("debug")("backbonemonitor");
+const LinkSpeed = require("../db/LinkSpeed");
+const NodeReachable = require("../db/NodeReachable");
 const Iperf3 = require("../test/Iperf3");
 const Utils = require("../Utils");
 
 const TICK = 15 * 60; // 15 minutes
 const TIMEOUT_NEIGHBOR = 30; // 30 minutes
+const TRUNCATE_MINUTES = 2 * 24 * 60; // 2 days
 
 class BackboneMonitor {
 
@@ -59,6 +62,9 @@ class BackboneMonitor {
                 await links[i].peerB.updateLinkSpeed(links[i].peerA, null);
             }
         }
+
+        await NodeReachable.truncateResults(TRUNCATE_MINUTES);
+        await LinkSpeed.truncateResults(TRUNCATE_MINUTES)
     }
 
 }
