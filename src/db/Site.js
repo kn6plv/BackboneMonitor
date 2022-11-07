@@ -28,6 +28,10 @@ class Site {
         await db.query(`INSERT INTO site_rootnode (site, node) VALUES ("${this.name}", "${node.name}");`);
     }
 
+    async removeRootNode(node) {
+        await db.query(`DELETE FROM site_rootnode WHERE site = "${this.name}" AND node = "${node.name}";`);
+    }
+
     async getRootNode() {
         Log("RootNodes:");
         const root = await db.get(`SELECT node FROM site_rootnode WHERE site = "${this.name}";`);
