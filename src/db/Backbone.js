@@ -30,6 +30,10 @@ class Backbone {
         await db.query(`INSERT INTO backbone_links (backbone, peerA, peerB, type, bandwidth) VALUES("${this.name}", "${peerA.name}", "${peerB.name}", "${type}", ${bandwidth});`);
     }
 
+    async removeSiteLink(peerA, peerB) {
+        await db.query(`DELETE FROM backbone_links WHERE backbone = "${this.name}" AND peerA = "${peerA.name}" and peerB = "${peerB.name}";`);
+    }
+
     async getIcon() {
         const icon = await db.get(`SELECT icon FROM backbone WHERE backbone = "${this.name}";`);
         if (!icon) {
