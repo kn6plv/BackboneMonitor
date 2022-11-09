@@ -89,6 +89,9 @@ Handlebars.registerHelper({
     },
     length: function(v) {
         return v.length;
+    },
+    tolower: function(v) {
+        return v.toLowerCase();
     }
 });
 
