@@ -38,7 +38,7 @@ class BackboneMonitor {
         const links = await this.backbone.getSiteLinks();
         for (let i = 0; i < links.length; i++) {
             const neighborsA = await links[i].peerA.getNeighbor(links[i].peerB, TIMEOUT_NEIGHBOR);
-            if (neighborsA.find(neighbor => neighbor.type == links[i].type)) {
+            if (neighborsA.find(neighbor => Utils.equalStringIgnoreCase(neighbor.type, links[i].type))) {
                 const testA = new Iperf3({
                     client: links[i].peerA.name,
                     server: links[i].peerB.name
@@ -50,7 +50,7 @@ class BackboneMonitor {
                 await links[i].peerA.updateLinkSpeed(links[i].peerB, null);
             }
             const neighborsB = await links[i].peerB.getNeighbor(links[i].peerA, TIMEOUT_NEIGHBOR);
-            if (neighborsB.find(neighbor => neighbor.type == links[i].type)) {
+            if (neighborsB.find(neighbor => Utils.equalStringIgnoreCase(neighbor.type, links[i].type))) {
                 const testB = new Iperf3({
                     client: links[i].peerB.name,
                     server: links[i].peerA.name
