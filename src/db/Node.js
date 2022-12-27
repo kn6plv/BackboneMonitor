@@ -59,7 +59,7 @@ class Node {
 
         const root = await (await this.getSite()).getRootNode();
 
-        if (this.name === root.name) {
+        if (Utils.equalStringIgnoreCase(this.name, root.name)) {
             return {
                 bandwidth: this.bandwidth,
                 uptime: uptime,
@@ -80,7 +80,7 @@ class Node {
 
     async getBandwidthResults(past) {
         const root = await (await this.getSite()).getRootNode();
-        if (root.name == this.name) {
+        if (Utils.equalStringIgnoreCase(this.name, root.name)) {
             return null;
         }
         const links = [

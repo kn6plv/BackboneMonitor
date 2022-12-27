@@ -33,7 +33,7 @@ class SiteMonitor {
         const root = await this.site.getRootNode();
         const nodes = await this.site.getNodes();
         for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].name !== root.name) {
+            if (!Utils.equalStringIgnoreCase(nodes[i].name, root.name)) {
                 const test1 = new Iperf3({
                     client: root.name,
                     server: nodes[i].name

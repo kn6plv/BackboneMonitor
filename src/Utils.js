@@ -162,6 +162,16 @@ const Utils = {
         const dfrom = Turf.point([ from.lon, from.lat ]);
         const dto = Turf.point([ to.lon, to.lat ]);
         return Turf.distance(dfrom, dto, { units: units || "miles" });
+    },
+
+    equalStringIgnoreCase(str1, str2) {
+        if (typeof str1 !== "string" || typeof str2 !== "string") {
+            return false;
+        }
+        if (str1 == str2) {
+            return true;
+        }
+        return str1.toLocaleLowerCase() == str2.toLocaleLowerCase();
     }
 
 };

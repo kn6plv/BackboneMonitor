@@ -23,7 +23,7 @@ class Node extends Crumb {
         const root = await site.getRootNode();
 
         let graphs;
-        if (root.name === this.node.name) {
+        if (Utils.equalStringIgnoreCase(root.name, this.node.name)) {
             // We dont have any bandwidth graphs from the root node to itself, so
             // we pick an alternative site node and use it's value (but flipped).
             graphs = new SpeedGraph(this.name, site.name, {
