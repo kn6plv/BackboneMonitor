@@ -23,7 +23,7 @@ const Node = require("./db/Node");
         return sroot;
     }
 
-    async function AddSiteNodes(name, nodes) {
+    async function addSiteNodes(name, nodes) {
         const site = Site.getSite(name);
         if (nodes) {
             for (let i = 0; i < nodes.length; i++) {
@@ -33,7 +33,7 @@ const Node = require("./db/Node");
     }
 
     const bruno = await (await b.getSite("San Bruno Mtn")).getRootNode();
-    const carlos = await addSite("San Carlos", "aj6vv-sc-90sect-86", [ "aj6vv-sc-90sect-345", "aj6vv-sc-90sect-26-175" ]);
+    const carlos = await (await b.getSite("San Carlos")).getRootNode();
+    await b.removeSiteLink(bruno, carlos);
     await b.addSiteLink(bruno, carlos, "DTD", 80);
-
 })();
