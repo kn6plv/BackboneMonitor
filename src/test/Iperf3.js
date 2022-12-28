@@ -36,8 +36,6 @@ class IPerf3 {
             Log("ran:", this.client, this.server, text);
             if (text) {
                 const patt = [
-                    { p: /([\d\.]+)\sMbits\/sec.+\(([\d\.]+)%.*receiver/g,  e: m => { return { bandwidth: parseFloat(m[1]) } } },
-                    { p: /([\d\.]+)\sKbits\/sec.+\(([\d\.]+)%.*receiver/g,  e: m => { return { bandwidth: parseFloat(m[1]) / 1000 } } },
                     { p: /([\d\.]+)\sMbits\/sec.*receiver/g,                e: m => { return { bandwidth: parseFloat(m[1]) } } },
                     { p: /([\d\.]+)\sKbits\/sec.*receiver/g,                e: m => { return { bandwidth: parseFloat(m[1]) / 1000 } } }
                 ];

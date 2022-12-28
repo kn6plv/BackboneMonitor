@@ -8,6 +8,7 @@ const Utils = require("../Utils");
 const TICK = 15 * 60; // 15 minutes
 const TIMEOUT_NEIGHBOR = 30; // 30 minutes
 const TRUNCATE_MINUTES = 2 * 24 * 60; // 2 days
+const IPERF3_PROTOCOL = "udp";
 
 class BackboneMonitor {
 
@@ -41,7 +42,8 @@ class BackboneMonitor {
             if (neighborsA.find(neighbor => Utils.equalStringIgnoreCase(neighbor.type, links[i].type))) {
                 const testA = new Iperf3({
                     client: links[i].peerA.name,
-                    server: links[i].peerB.name
+                    server: links[i].peerB.name,
+                    protocol: IPERF3_PROTOCOL
                 });
                 await links[i].peerA.updateLinkSpeed(links[i].peerB, await testA.run());
             }
@@ -53,7 +55,8 @@ class BackboneMonitor {
             if (neighborsB.find(neighbor => Utils.equalStringIgnoreCase(neighbor.type, links[i].type))) {
                 const testB = new Iperf3({
                     client: links[i].peerB.name,
-                    server: links[i].peerA.name
+                    server: links[i].peerA.name,
+                    protocol: IPERF3_PROTOCOL
                 });
                 await links[i].peerB.updateLinkSpeed(links[i].peerA, await testB.run());
             }
