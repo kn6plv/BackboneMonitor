@@ -10,12 +10,16 @@ class IPerf3 {
         this.protocol = config.protocol || "tcp";
         this.timeout = config.timeout || 30;
         this.retries = config.retries || 3;
+        this.retrydelay = config.retrydelay || 60;
     }
 
     async run() {
         Log(`run: client ${this.client} <- server ${this.server} (${this.protocol})`);
         for (let i = 0; i < this.retries; i++) {
             try {
+                if (i > 0) {
+                    await new Promise(resolve => setTimeout(resolve, this.retrydelay * 1000));
+                }
                 const results = await this.runTest();
                 if (results) {
                     return results;
