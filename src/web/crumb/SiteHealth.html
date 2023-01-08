@@ -1,4 +1,4 @@
-<div class="site-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+<div class="site-health health-{{health.health}} uptime-{{#if (gte health.uptime 90)}}good{{else if (gte health.uptime 80)}}poor{{else}}bad{{/if}}">
     <a href="{{path}}@{{name}}">
         <div class="name">{{name}}</div>
         <div class="health">Health: <span class="status">{{health.health}}</span></div>

@@ -4,7 +4,7 @@
     <div id="info-body">
         <div class="col">
             <div id="info-header">
-                <div class="site-link-health health-{{health.health}} uptime-{{#if (gte health.uptime 95)}}good{{else if (gte health.uptime 90)}}poor{{else}}bad{{/if}}">
+                <div class="site-link-health health-{{health.health}} uptime-{{#if (gte health.uptime 90)}}good{{else if (gte health.uptime 80)}}poor{{else}}bad{{/if}}">
                     <div class="link">
                         <div class="name"><a href="{{../path}}@{{siteA}}">{{siteA}}</a></div><div class="join">&nbsp;</div><div class="name"><a href="{{../path}}@{{siteB}}">{{siteB}}</a></div>
                     </div>

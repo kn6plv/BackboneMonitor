@@ -6,8 +6,8 @@ const Turf = require('@turf/turf');
 
 const BANDWIDTH_GOOD = 70;
 const BANDWIDTH_POOR = 50;
-const UPTIME_GOOD = 95;
-const UPTIME_POOR = 90;
+const UPTIME_GOOD = 90;
+const UPTIME_POOR = 80;
 
 const scoreboard = {
     marks: {},
