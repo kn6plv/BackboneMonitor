@@ -4,6 +4,7 @@ const Utils = require("../Utils");
 
 const TIMEOUT_SYSINFO = 5;
 const RETRY_SYSINFO = 1;
+const DELAY_SYSINFO = 30;
 const TICK = 5 * 60; // 5 minutes
 
 class NodeMonitor {
@@ -16,7 +17,7 @@ class NodeMonitor {
         for (;;) {
             const start = Date.now();
             try {
-                const sysinfo = await Utils.mark(this.node.name, async () => await Utils.fetchWithTimeoutAndRetry(`http://${this.node.name}:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, "json", TIMEOUT_SYSINFO, RETRY_SYSINFO));
+                const sysinfo = await Utils.mark(this.node.name, async () => await Utils.fetchWithTimeoutAndRetry(`http://${this.node.name}:8080/cgi-bin/sysinfo.json?link_info=1&lqm=1`, "json", TIMEOUT_SYSINFO, RETRY_SYSINFO, DELAY_SYSINFO));
                 if (sysinfo) {
                     await this.node.updateBasics(sysinfo);
                     await this.node.updateNeighbors(sysinfo);
