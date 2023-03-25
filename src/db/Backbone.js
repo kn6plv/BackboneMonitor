@@ -27,7 +27,7 @@ class Backbone {
     }
 
     async removeSite(site) {
-        await db.query(`DELETE FRONT backbone_sites WHERE backbone = "${this.name}" AND site = "${site.name}";`);
+        await db.query(`DELETE FROM backbone_sites WHERE backbone = "${this.name}" AND site = "${site.name}";`);
     }
 
     async addSiteLink(peerA, peerB, type, bandwidth) {
