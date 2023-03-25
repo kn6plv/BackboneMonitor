@@ -26,6 +26,10 @@ class Backbone {
         await db.query(`INSERT INTO backbone_sites (backbone, site) VALUES("${this.name}", "${site.name}");`);
     }
 
+    async removeSite(site) {
+        await db.query(`DELETE FRONT backbone_sites WHERE backbone = "${this.name}" AND site = "${site.name}";`);
+    }
+
     async addSiteLink(peerA, peerB, type, bandwidth) {
         await db.query(`INSERT INTO backbone_links (backbone, peerA, peerB, type, bandwidth) VALUES("${this.name}", "${peerA.name}", "${peerB.name}", "${type}", ${bandwidth});`);
     }
